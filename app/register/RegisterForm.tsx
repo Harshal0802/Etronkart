@@ -37,9 +37,10 @@ const RegisterForm = () => {
 
         signIn("credentials", {
           email: data.email,
-          passworld: data.password,
+          password: data.password,
           redirect: false,
         }).then((callback) => {
+          console.log("callback", callback);
           if (callback?.ok) {
             router.push("/cart");
             router.refresh();
