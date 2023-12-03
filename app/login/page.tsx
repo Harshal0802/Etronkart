@@ -2,12 +2,14 @@ import React from "react";
 import Container from "@/app/components/Container";
 import FormWrap from "../components/FormWrap";
 import LoginForm from "./LoginForm";
+import { getCurrentUser } from "@/actions/getCurrentUser";
 
-const Login = () => {
+const Login = async () => {
+  const currentUser: any = await getCurrentUser();
   return (
     <Container>
       <FormWrap>
-        <LoginForm />
+        <LoginForm currentUser={currentUser} />
       </FormWrap>
     </Container>
   );

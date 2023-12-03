@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Heading from "@/app/components/Heading";
 import Input from "../components/input/Input";
 import { useState } from "react";
@@ -12,8 +12,13 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { SafeUser } from "@/types";
 
-const RegisterForm = () => {
+interface RegisterFormProps {
+  currentUser: SafeUser;
+}
+
+const RegisterForm: React.FC<RegisterFormProps> = ({ currentUser }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -27,6 +32,13 @@ const RegisterForm = () => {
       password: "",
     },
   });
+
+  useEffect(() => {
+    if (currentUser) {
+      router.push("/cart");
+      router.refresh();
+    }
+  }, []);
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true);
@@ -56,12 +68,18 @@ const RegisterForm = () => {
       .finally(() => setIsLoading(false));
   };
 
+  if (currentUser) {
+    return <p className="text-center">Signing In. Redirecting</p>;
+  }
+
   return (
     <>
       <Heading title="Sign up for EtronKart" />
       <Button
-        label="Sign up with Google"
-        onClick={() => {}}
+        label="Continue with Google"
+        onClick={() => {
+          signIn("google");
+        }}
         outline
         icon={AiOutlineGoogle}
       />
